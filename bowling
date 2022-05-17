@@ -1,0 +1,48 @@
+import random
+
+numOfplayers = int(input("Enter the number of players: "))
+players = []
+
+for i in range(numOfplayers):
+    player = input('Enter name for Player ' + str(i + 1) + ': ')
+    players.append(player)
+    
+bowlingfile = open('bowling_score.txt', 'w')
+
+def game(player):
+    for i in range(10):
+        print('\nRound ' + str(i + 1))
+        for player in players:
+            score1 = random.randint(0, 10)
+            score2 = 0 
+            if score1 == 10:
+                score2 = 0
+            else:
+                score2 = random.randint(0, 10 - score1)
+            print(player,":", score1, score2)
+            bowlingfile.write(str(player) + '\n')
+            bowlingfile.write(str(score1) + '\n')
+            bowlingfile.write(str(score2) + '\n')
+
+game(players)
+bowlingfile.close()
+
+def finalScore(player):
+    bowlingfile = open('bowling_score.txt', 'r')
+    finalScore = 0
+    roundScore = 0
+    if player in players:
+        for line in bowlingfile:
+            if player in line:
+                score1 = int(bowlingfile.readline().rstrip())
+                score2 = int(bowlingfile.readline().rstrip())
+                roundScore = score1 + score2
+                finalScore += roundScore
+            else:
+                bowlingfile.readline().rstrip() 
+    bowlingfile.close()
+    return finalScore
+    
+print('\nFinal Score: ')
+for player in players:
+    print(player, finalScore(player))
